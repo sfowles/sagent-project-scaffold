@@ -17,6 +17,10 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
         family: 'Helvetica Neue',
         style: 'Regular'
     });
+    yield figma.loadFontAsync({
+        family: 'Helvetica Neue',
+        style: 'Bold'
+    });
     // Create pages
     let breakPage = figma.createPage();
     let workingPage = figma.createPage();
@@ -73,6 +77,14 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     const selectedOverviewVariant = overviewComponentSet.findOne(node => node.type == "COMPONENT" &&
         node.name == `Variant=Default`);
     const selectedOverviewVariantInstance = selectedOverviewVariant.createInstance();
+    const overviewDescription = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Body Text');
+    overviewDescription.characters = pluginMessage.description;
+    const overviewAzure = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == '*Paste Azure ticket here');
+    overviewAzure.characters = pluginMessage.azure;
+    const overviewOwner = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'First & Last Name');
+    overviewOwner.characters = pluginMessage.owner;
+    const overviewStart = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Month DD, YYYY');
+    overviewStart.characters = pluginMessage.start;
     figma.currentPage.appendChild(selectedOverviewVariantInstance);
     const nodes = [];
     nodes.push(selectedOverviewVariantInstance);

@@ -12,6 +12,11 @@ figma.ui.onmessage = async(pluginMessage) => {
     style: 'Regular'
   });
 
+  await figma.loadFontAsync({
+    family: 'Helvetica Neue',
+    style: 'Bold'
+  });
+
   // Create pages
   let breakPage = figma.createPage();
   let workingPage = figma.createPage();
@@ -75,6 +80,14 @@ figma.ui.onmessage = async(pluginMessage) => {
     node.name == `Variant=Default`
   ) as ComponentNode;
   const selectedOverviewVariantInstance = selectedOverviewVariant.createInstance();
+  const overviewDescription = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Body Text') as TextNode;
+  overviewDescription.characters = pluginMessage.description;
+  const overviewAzure = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == '*Paste Azure ticket here') as TextNode;
+  overviewAzure.characters = pluginMessage.azure;
+  const overviewOwner = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'First & Last Name') as TextNode;
+  overviewOwner.characters = pluginMessage.owner;
+  const overviewStart = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Month DD, YYYY') as TextNode;
+  overviewStart.characters = pluginMessage.start;
   figma.currentPage.appendChild(selectedOverviewVariantInstance);
   const nodes: SceneNode[] = [];
   nodes.push(selectedOverviewVariantInstance);
