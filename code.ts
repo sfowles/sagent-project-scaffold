@@ -15,8 +15,8 @@ figma.ui.onmessage = async(pluginMessage) => {
   // Create pages
   let breakPage = figma.createPage();
   let workingPage = figma.createPage();
-  let referencePage = figma.createPage();
   let breakPage2 = figma.createPage();
+  let referencePage = figma.createPage();
   let coverPage = figma.createPage();
 
   figma.currentPage.name = "📓 Overview";
