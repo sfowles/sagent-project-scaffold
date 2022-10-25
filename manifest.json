@@ -1,6 +1,10 @@
 {
-  "name": "Discord Project Scaffold",
+  "name": "Sagent Project Scaffold",
   "id": "",
   "api": "1.0.0",
-  "main": "code.js"
+  "editorType": [
+    "figma"
+  ],
+  "main": "code.js",
+  "ui": "ui.html"
 }

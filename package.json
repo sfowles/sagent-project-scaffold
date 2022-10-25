@@ -1,0 +1,16 @@
+{
+    "name": "sagent-figma-scaffold",
+    "version": "1.0.0",
+    "description": "Sagent Figma Scaffold",
+    "main": "code.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "watch": "npm run build -- --watch"
+    },
+    "author": "Scott Fowles",
+    "license": "",
+    "devDependencies": {
+        "@figma/plugin-typings": "^1.50.0",
+        "typescript": "*"
+    }
+}
