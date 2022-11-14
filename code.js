@@ -13,15 +13,12 @@ const documentName = figma.root.name;
 figma.ui.postMessage(documentName);
 figma.ui.resize(500, 500);
 figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, function* () {
-    yield figma.loadFontAsync({
-        family: 'Helvetica Neue',
-        style: 'Regular'
-    });
-    yield figma.loadFontAsync({
-        family: 'Helvetica Neue',
-        style: 'Bold'
-    });
-    // Create pages
+    // Need to load a font here to generate components and page examples.
+    yield figma.loadFontAsync({ family: "Inter", style: "Regular" });
+    yield figma.loadFontAsync({ family: "Inter", style: "Bold" });
+    yield figma.loadFontAsync({ family: "Helvetica Neue", style: "Regular" });
+    yield figma.loadFontAsync({ family: "Helvetica Neue", style: "Bold" });
+    // Set page names and renames the default "Page 1"
     let breakPage = figma.createPage();
     let workingPage = figma.createPage();
     let breakPage2 = figma.createPage();
@@ -29,7 +26,6 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     let coverPage = figma.createPage();
     figma.currentPage.name = "📓 Overview";
     breakPage.name = "-----";
-    // Set page names and renames the default "Page 1"
     switch (pluginMessage.status) {
         case "Exploration":
             workingPage.name = "🚀 Exploration";
@@ -77,13 +73,17 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     const selectedOverviewVariant = overviewComponentSet.findOne(node => node.type == "COMPONENT" &&
         node.name == `Variant=Default`);
     const selectedOverviewVariantInstance = selectedOverviewVariant.createInstance();
-    const overviewDescription = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Body Text');
+    const overviewDescription = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == 'Body Text');
     overviewDescription.characters = pluginMessage.description;
-    const overviewAzure = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == '*Paste Azure ticket here');
+    const overviewAzure = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == '*Paste Azure ticket here');
     overviewAzure.characters = pluginMessage.azure;
-    const overviewOwner = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'First & Last Name');
+    const overviewOwner = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == 'First & Last Name');
     overviewOwner.characters = pluginMessage.owner;
-    const overviewStart = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Month DD, YYYY');
+    const overviewStart = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == 'Month DD, YYYY');
     overviewStart.characters = pluginMessage.start;
     figma.currentPage.appendChild(selectedOverviewVariantInstance);
     const nodes = [];
@@ -94,8 +94,10 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     const selectedVariant = coverComponentSet.findOne(node => node.type == "COMPONENT" &&
         node.name == `Status=${pluginMessage.status}`);
     const selectedVariantInstance = selectedVariant.createInstance();
-    const variantTitle = selectedVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Title');
-    const variantWorkstream = selectedVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Workstream');
+    const variantTitle = selectedVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == 'Title');
+    const variantWorkstream = selectedVariantInstance.findOne(node => node.type == 'TEXT' &&
+        node.name == 'Workstream');
     variantTitle.characters = pluginMessage.title;
     variantWorkstream.characters = pluginMessage.workstream;
     // Create frame for wrapping the cover image.
@@ -104,15 +106,11 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     coverPage.appendChild(coverFrame);
     coverFrame.appendChild(selectedVariantInstance);
     coverFrame.resize(selectedVariantInstance.width, selectedVariantInstance.height);
-    // Make frame the document thumbnail.
+    // Define the document thumbnail.
     figma.setFileThumbnailNodeAsync(coverFrame);
     let run = () => __awaiter(void 0, void 0, void 0, function* () {
-        // Need to load a font here to generate the other page examples.
-        yield figma.loadFontAsync({ family: "Inter", style: "Regular" });
-        yield figma.loadFontAsync({ family: "Inter", style: "Bold" });
-        // Not all projects need a prototype, shipped it/released, or research page.
-        // However in order to make adding one of these pages easily, we add some
-        // text to the reference page so we can copy/paste them with the proper emoji.
+        // To make adding additional pages easy, we include some text on a
+        // reference page so we can copy/paste them with the proper emoji.
         yield createAdditionalPageExample("📓 Overview");
         yield createAdditionalPageExample("🚀 Exploration");
         yield createAdditionalPageExample("🚧 Design In Progress");
@@ -131,8 +129,8 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
         figma.notify("Project Scaffolding for " + documentName + " done! 👍");
         figma.closePlugin();
     });
-    // This function adds an example of how to name your less common pages + their emoji
-    // to the reference page.
+    // This function adds an example of how to name your less common pages
+    // and their emoji to the reference page.
     let createAdditionalPageExample = (text) => {
         let linkLabel = figma.createText();
         linkLabel.fontName = { family: "Inter", style: "Regular" };

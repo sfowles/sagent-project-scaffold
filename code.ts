@@ -7,17 +7,13 @@ figma.ui.resize(500, 500);
 
 figma.ui.onmessage = async(pluginMessage) => {
 
-  await figma.loadFontAsync({
-    family: 'Helvetica Neue',
-    style: 'Regular'
-  });
+  // Need to load a font here to generate components and page examples.
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  await figma.loadFontAsync({ family: "Helvetica Neue", style: "Regular" });
+  await figma.loadFontAsync({ family: "Helvetica Neue", style: "Bold" });
 
-  await figma.loadFontAsync({
-    family: 'Helvetica Neue',
-    style: 'Bold'
-  });
-
-  // Create pages
+  // Set page names and renames the default "Page 1"
   let breakPage = figma.createPage();
   let workingPage = figma.createPage();
   let breakPage2 = figma.createPage();
@@ -27,7 +23,6 @@ figma.ui.onmessage = async(pluginMessage) => {
   figma.currentPage.name = "📓 Overview";
   breakPage.name = "-----";
 
-  // Set page names and renames the default "Page 1"
   switch (pluginMessage.status) {
     case "Exploration":
       workingPage.name = "🚀 Exploration";
@@ -80,13 +75,25 @@ figma.ui.onmessage = async(pluginMessage) => {
     node.name == `Variant=Default`
   ) as ComponentNode;
   const selectedOverviewVariantInstance = selectedOverviewVariant.createInstance();
-  const overviewDescription = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Body Text') as TextNode;
+  const overviewDescription = selectedOverviewVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == 'Body Text'
+  ) as TextNode;
   overviewDescription.characters = pluginMessage.description;
-  const overviewAzure = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == '*Paste Azure ticket here') as TextNode;
+  const overviewAzure = selectedOverviewVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == '*Paste Azure ticket here'
+  ) as TextNode;
   overviewAzure.characters = pluginMessage.azure;
-  const overviewOwner = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'First & Last Name') as TextNode;
+  const overviewOwner = selectedOverviewVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == 'First & Last Name'
+  ) as TextNode;
   overviewOwner.characters = pluginMessage.owner;
-  const overviewStart = selectedOverviewVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Month DD, YYYY') as TextNode;
+  const overviewStart = selectedOverviewVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == 'Month DD, YYYY'
+  ) as TextNode;
   overviewStart.characters = pluginMessage.start;
   figma.currentPage.appendChild(selectedOverviewVariantInstance);
   const nodes: SceneNode[] = [];
@@ -100,8 +107,14 @@ figma.ui.onmessage = async(pluginMessage) => {
     node.name == `Status=${pluginMessage.status}`
   ) as ComponentNode;
   const selectedVariantInstance = selectedVariant.createInstance();
-  const variantTitle = selectedVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Title') as TextNode;
-  const variantWorkstream = selectedVariantInstance.findOne(node => node.type == 'TEXT' && node.name == 'Workstream') as TextNode;
+  const variantTitle = selectedVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == 'Title'
+  ) as TextNode;
+  const variantWorkstream = selectedVariantInstance.findOne(
+    node => node.type == 'TEXT' &&
+    node.name == 'Workstream'
+  ) as TextNode;
   variantTitle.characters = pluginMessage.title;
   variantWorkstream.characters = pluginMessage.workstream;
 
@@ -112,18 +125,13 @@ figma.ui.onmessage = async(pluginMessage) => {
   coverFrame.appendChild(selectedVariantInstance);
   coverFrame.resize(selectedVariantInstance.width, selectedVariantInstance.height);
 
-  // Make frame the document thumbnail.
+  // Define the document thumbnail.
   figma.setFileThumbnailNodeAsync(coverFrame);
 
   let run = async () => {
 
-    // Need to load a font here to generate the other page examples.
-    await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-    await figma.loadFontAsync({ family: "Inter", style: "Bold" });
-
-    // Not all projects need a prototype, shipped it/released, or research page.
-    // However in order to make adding one of these pages easily, we add some
-    // text to the reference page so we can copy/paste them with the proper emoji.
+    // To make adding additional pages easy, we include some text on a
+    // reference page so we can copy/paste them with the proper emoji.
     await createAdditionalPageExample("📓 Overview");
     await createAdditionalPageExample("🚀 Exploration");
     await createAdditionalPageExample("🚧 Design In Progress");
@@ -144,8 +152,8 @@ figma.ui.onmessage = async(pluginMessage) => {
     figma.closePlugin();
   }
 
-  // This function adds an example of how to name your less common pages + their emoji
-  // to the reference page.
+  // This function adds an example of how to name your less common pages
+  // and their emoji to the reference page.
   let createAdditionalPageExample = (text: string) => {
     let linkLabel = figma.createText();
     linkLabel.fontName = { family: "Inter", style: "Regular" };
