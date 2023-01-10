@@ -14,10 +14,10 @@ figma.ui.postMessage(documentName);
 figma.ui.resize(500, 500);
 figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, function* () {
     // Need to load a font here to generate components and page examples.
-    yield figma.loadFontAsync({ family: "Inter", style: "Regular" });
-    yield figma.loadFontAsync({ family: "Inter", style: "Bold" });
-    yield figma.loadFontAsync({ family: "Helvetica Neue", style: "Regular" });
-    yield figma.loadFontAsync({ family: "Helvetica Neue", style: "Bold" });
+    yield figma.loadFontAsync({ family: "PP Mori", style: "Regular" });
+    yield figma.loadFontAsync({ family: "PP Mori", style: "SemiBold" });
+    yield figma.loadFontAsync({ family: "Helvetica Now Display", style: "Regular" });
+    yield figma.loadFontAsync({ family: "Helvetica Now Display", style: "Bold" });
     // Set page names and renames the default "Page 1"
     let breakPage = figma.createPage();
     let workingPage = figma.createPage();
@@ -133,7 +133,7 @@ figma.ui.onmessage = (pluginMessage) => __awaiter(void 0, void 0, void 0, functi
     // and their emoji to the reference page.
     let createAdditionalPageExample = (text) => {
         let linkLabel = figma.createText();
-        linkLabel.fontName = { family: "Inter", style: "Regular" };
+        linkLabel.fontName = { family: "Helvetica Now Display", style: "Regular" };
         linkLabel.characters = text;
         linkLabel.fontSize = 16;
         listFrame.appendChild(linkLabel);

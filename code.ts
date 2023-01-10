@@ -8,10 +8,10 @@ figma.ui.resize(500, 500);
 figma.ui.onmessage = async(pluginMessage) => {
 
   // Need to load a font here to generate components and page examples.
-  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
-  await figma.loadFontAsync({ family: "Helvetica Neue", style: "Regular" });
-  await figma.loadFontAsync({ family: "Helvetica Neue", style: "Bold" });
+  await figma.loadFontAsync({ family: "PP Mori", style: "Regular" });
+  await figma.loadFontAsync({ family: "PP Mori", style: "SemiBold" });
+  await figma.loadFontAsync({ family: "Helvetica Now Display", style: "Regular" });
+  await figma.loadFontAsync({ family: "Helvetica Now Display", style: "Bold" });
 
   // Set page names and renames the default "Page 1"
   let breakPage = figma.createPage();
@@ -156,7 +156,7 @@ figma.ui.onmessage = async(pluginMessage) => {
   // and their emoji to the reference page.
   let createAdditionalPageExample = (text: string) => {
     let linkLabel = figma.createText();
-    linkLabel.fontName = { family: "Inter", style: "Regular" };
+    linkLabel.fontName = { family: "Helvetica Now Display", style: "Regular" };
     linkLabel.characters = text;
     linkLabel.fontSize = 16;
     listFrame.appendChild(linkLabel);
