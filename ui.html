@@ -23,6 +23,10 @@
     margin-top: 0;
   }
 
+  .jira-input {
+    display: none;
+  }
+
   input, select {
     display: block;
   }
@@ -40,6 +44,10 @@
   .select-menu__button:focus,
   .textarea:focus {
     border-color: #18a0fb !important;
+  }
+
+  .input__field:disabled {
+    color: #666 !important;
   }
 
   .select-menu {
@@ -73,6 +81,22 @@
     width: calc(100% - 2rem);
   }
 
+  .switch {
+    top: -10px;
+  }
+
+  .switch__label {
+    color: #fff;
+  }
+
+  .switch__label::before {
+    background-color: #464D53;
+  }
+
+  .switch__toggle:checked + .switch__label::before {
+    background-color: #45E2DA;
+  }
+
   .sagent-logo {
     position: relative;
     display: inline-block;
@@ -96,6 +120,11 @@
   <div>
     <label for="title">Title</label>
     <input type="text" id="title" class="input__field" placeholder="Type a title for the cover" />
+  </div>
+
+  <div class="switch">
+    <input class="switch__toggle" type="checkbox" id="component" onchange="isComponent(this)">
+    <label class="switch__label" for="component">Design System Component</label>
   </div>
 
   <div>
@@ -127,9 +156,14 @@
     <textarea class="textarea" id="description" placeholder="Type a brief description of what this file will contain." rows="2"></textarea>
   </div>
 
-  <div>
+  <div class="azure-input">
     <label for="azure">Azure Story Link (optional)</label>
     <input type="text" id="azure" class="input__field" placeholder="https://" />
+  </div>
+
+  <div class="jira-input">
+    <label for="jira">Jira Story Link (optional)</label>
+    <input type="text" id="jira" class="input__field" placeholder="https://" />
   </div>
 
   <div>
@@ -160,6 +194,23 @@
     document.querySelector('.start').setAttribute('value', today);
   })();
 
+  // Run when Component toggle is changed
+  function isComponent(e){
+    if (e.checked) {
+      document.querySelector('#workstream').value = 'Component';
+      document.querySelector('#workstream').disabled = true;
+      document.querySelector('.azure-input').style.display = 'none';
+      document.querySelector('.jira-input').style.display = 'block';
+    }
+
+    if (e.checked === false) {
+      document.querySelector('#workstream').value = null;
+      document.querySelector('#workstream').disabled = false;
+      document.querySelector('.azure-input').style.display = 'block';
+      document.querySelector('.jira-input').style.display = 'none';
+    }
+  }
+
   // Run on submit
   onmessage = event => {
     const documentName = event.data.pluginMessage;
@@ -174,6 +225,7 @@
     const azure = document.getElementById('azure').value;
     const owner = document.getElementById('owner').value;
     const start = document.getElementById('start').value;
+    const isComponent = document.querySelector('#component').checked;
 
     parent.postMessage({
       pluginMessage: {
@@ -183,7 +235,8 @@
         description,
         azure,
         owner,
-        start
+        start,
+        isComponent
       }
     }, '*');
   }

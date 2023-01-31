@@ -16,6 +16,46 @@ figma.ui.onmessage = async(pluginMessage) => {
   // Set page names and renames the default "Page 1"
   let breakPage = figma.createPage();
   let workingPage = figma.createPage();
+  // Check if this file is for a component
+  if (pluginMessage.isComponent) {
+    let reqPage = figma.createPage();
+    let docPage = figma.createPage();
+    reqPage.name = "📖 Requirements";
+    docPage.name = "📖 Documentation";
+    // Instantiate component documentation from published component.
+    let documentationComponentSet = await figma.importComponentSetByKeyAsync("453910918ddaac17c505d209f6b3b0f68c352e31");
+    const selectedDocumentationVariant = documentationComponentSet.findOne(
+      node => node.type == "COMPONENT" &&
+      node.name == `Variant=Default`
+    ) as ComponentNode;
+    const selectedDocumentationVariantInstance = selectedDocumentationVariant.createInstance();
+    const documentationHeading = selectedDocumentationVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == 'Heading'
+    ) as TextNode;
+    documentationHeading.characters = pluginMessage.title;
+    const documentationDescription = selectedDocumentationVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == 'Description'
+    ) as TextNode;
+    documentationDescription.characters = pluginMessage.description;
+    docPage.appendChild(selectedDocumentationVariantInstance);
+    const nodes: SceneNode[] = [];
+    nodes.push(selectedDocumentationVariantInstance);
+    figma.viewport.scrollAndZoomIntoView(nodes);
+
+    // Instantiate component requirements from published component.
+    let requirementsComponentSet = await figma.importComponentSetByKeyAsync("e6d97f0899b0aef118a5b633e942e212d6123ab4");
+    const selectedRequirementsVariant = requirementsComponentSet.findOne(
+      node => node.type == "COMPONENT" &&
+      node.name == `Variant=Default`
+    ) as ComponentNode;
+    const selectedRequirementsVariantInstance = selectedRequirementsVariant.createInstance();
+    reqPage.appendChild(selectedRequirementsVariantInstance);
+    const nodes2: SceneNode[] = [];
+    nodes2.push(selectedRequirementsVariantInstance);
+    figma.viewport.scrollAndZoomIntoView(nodes2);
+  }
   let breakPage2 = figma.createPage();
   let referencePage = figma.createPage();
   let coverPage = figma.createPage();
@@ -51,6 +91,10 @@ figma.ui.onmessage = async(pluginMessage) => {
     case "Scrapped":
       workingPage.name = "💀 Scrapped";
       break;
+  }
+
+  if (pluginMessage.isComponent) {
+    workingPage.name = "⚙️ " + pluginMessage.title + " Component";
   }
 
   breakPage2.name = "-----";
