@@ -22,6 +22,7 @@ figma.ui.onmessage = async(pluginMessage) => {
     let docPage = figma.createPage();
     reqPage.name = "📖 Requirements";
     docPage.name = "📖 Documentation";
+
     // Instantiate component documentation from published component.
     let documentationComponentSet = await figma.importComponentSetByKeyAsync("453910918ddaac17c505d209f6b3b0f68c352e31");
     const selectedDocumentationVariant = documentationComponentSet.findOne(
@@ -124,16 +125,47 @@ figma.ui.onmessage = async(pluginMessage) => {
     node.name == 'Body Text'
   ) as TextNode;
   overviewDescription.characters = pluginMessage.description;
-  const overviewAzure = selectedOverviewVariantInstance.findOne(
-    node => node.type == 'TEXT' &&
-    node.name == '*Paste Azure ticket here'
-  ) as TextNode;
-  overviewAzure.characters = pluginMessage.azure;
-  const overviewOwner = selectedOverviewVariantInstance.findOne(
+  if (pluginMessage.problem !== '') {
+    const overviewProblem = selectedOverviewVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == 'Statement Text'
+    ) as TextNode;
+    overviewProblem.characters = pluginMessage.problem;
+  } else {
+    selectedOverviewVariantInstance.setProperties({ 'Show Problem Statement#317:0': false })
+  }
+  if (pluginMessage.story !== '') {
+    const overviewStory = selectedOverviewVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == 'Story Text'
+    ) as TextNode;
+    overviewStory.characters = pluginMessage.story;
+  } else {
+    selectedOverviewVariantInstance.setProperties({ 'Show User Story#317:2': false })
+  }
+  if (pluginMessage.persona !== '') {
+    const overviewPersona = selectedOverviewVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == 'Persona Text'
+    ) as TextNode;
+    overviewPersona.characters = pluginMessage.persona;
+  } else {
+    selectedOverviewVariantInstance.setProperties({ 'Show Persona#326:4': false })
+  }
+  if (pluginMessage.azure !== '') {
+    const overviewAzure = selectedOverviewVariantInstance.findOne(
+      node => node.type == 'TEXT' &&
+      node.name == '*Paste Azure ticket here'
+    ) as TextNode;
+    overviewAzure.characters = pluginMessage.azure;
+  } else {
+    selectedOverviewVariantInstance.setProperties({ 'Show Azure Link#4:1': false })
+  }
+  const overviewDesigner = selectedOverviewVariantInstance.findOne(
     node => node.type == 'TEXT' &&
     node.name == 'First & Last Name'
   ) as TextNode;
-  overviewOwner.characters = pluginMessage.owner;
+  overviewDesigner.characters = pluginMessage.designer;
   const overviewStart = selectedOverviewVariantInstance.findOne(
     node => node.type == 'TEXT' &&
     node.name == 'Month DD, YYYY'

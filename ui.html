@@ -10,6 +10,7 @@
 
   div {
     margin: 1em;
+    margin-top: 2rem;
   }
 
   .section {
@@ -27,8 +28,9 @@
     display: none;
   }
 
-  input, select {
+  input, select, textarea {
     display: block;
+    margin-top: 0.5rem !important;
   }
 
   .input__field,
@@ -52,6 +54,7 @@
 
   .select-menu {
     margin: 0 0 1em 0;
+    margin-top: 0.5rem !important;
   }
 
   .select-menu__label {
@@ -79,10 +82,6 @@
   .button {
     margin: 2rem 1rem 0;
     width: calc(100% - 2rem);
-  }
-
-  .switch {
-    top: -10px;
   }
 
   .switch__label {
@@ -117,14 +116,14 @@
 
   <h3 class="section__heading">Cover Image</h3>
 
+  <div class="switch switch--component">
+    <input class="switch__toggle" type="checkbox" id="component" onchange="isComponent(this)">
+    <label class="switch__label" for="component">Design System Component</label>
+  </div>
+
   <div>
     <label for="title">Title</label>
     <input type="text" id="title" class="input__field" placeholder="Type a title for the cover" />
-  </div>
-
-  <div class="switch">
-    <input class="switch__toggle" type="checkbox" id="component" onchange="isComponent(this)">
-    <label class="switch__label" for="component">Design System Component</label>
   </div>
 
   <div>
@@ -132,7 +131,7 @@
     <input type="text" id="workstream" class="input__field" placeholder="Type the workstream name" />
   </div>
 
-  <div>
+  <div id="file-status">
     <label for="status">File Status</label>
     <select class="select-menu" placeholder="Select a file status" id="status">
       <option value="Exploration">Exploration</option>
@@ -149,11 +148,26 @@
 </div>
 
 <div class="section section__overview">
-  <h3 class="section__heading">Project Overview</h3>
+  <h3 class="section__heading">File Overview</h3>
 
   <div>
     <label for="description">Description</label>
     <textarea class="textarea" id="description" placeholder="Type a brief description of what this file will contain." rows="2"></textarea>
+  </div>
+
+  <div class="problem">
+    <label for="problem">Problem Statement</label>
+    <textarea class="textarea" id="problem" placeholder="Clearly state the problem being solved, and who it is being solved for." rows="2"></textarea>
+  </div>
+
+  <div class="story">
+    <label for="story">User Story</label>
+    <textarea class="textarea" id="story" placeholder="Include the user story here." rows="2"></textarea>
+  </div>
+
+  <div class="persona">
+    <label for="persona">Persona</label>
+    <input type="text" id="persona" class="input__field" placeholder="Include the name of the persona(s) being targeted by this file." />
   </div>
 
   <div class="azure-input">
@@ -167,8 +181,8 @@
   </div>
 
   <div>
-    <label for="owner">Project Owner</label>
-    <input type="text" id="owner" class="input__field" placeholder="Who will own this project?" />
+    <label for="designer">Lead Designer</label>
+    <input type="text" id="designer" class="input__field" placeholder="Who will be the lead designer for this file?" />
   </div>
 
   <div>
@@ -195,12 +209,15 @@
   })();
 
   // Run when Component toggle is changed
-  function isComponent(e){
+  function isComponent(e) {
     if (e.checked) {
       document.querySelector('#workstream').value = 'Component';
       document.querySelector('#workstream').disabled = true;
       document.querySelector('.azure-input').style.display = 'none';
       document.querySelector('.jira-input').style.display = 'block';
+      document.querySelector('.problem').style.display = 'none';
+      document.querySelector('.story').style.display = 'none';
+      document.querySelector('.persona').style.display = 'none';
     }
 
     if (e.checked === false) {
@@ -208,6 +225,9 @@
       document.querySelector('#workstream').disabled = false;
       document.querySelector('.azure-input').style.display = 'block';
       document.querySelector('.jira-input').style.display = 'none';
+      document.querySelector('.problem').style.display = 'block';
+      document.querySelector('.story').style.display = 'block';
+      document.querySelector('.persona').style.display = 'block';
     }
   }
 
@@ -222,8 +242,11 @@
     const workstream = document.getElementById('workstream').value;
     const status = document.getElementById('status').value;
     const description = document.getElementById('description').value;
+    const problem = document.getElementById('problem').value;
+    const story = document.getElementById('story').value;
+    const persona = document.getElementById('persona').value;
     const azure = document.getElementById('azure').value;
-    const owner = document.getElementById('owner').value;
+    const designer = document.getElementById('designer').value;
     const start = document.getElementById('start').value;
     const isComponent = document.querySelector('#component').checked;
 
@@ -233,8 +256,11 @@
         workstream,
         status,
         description,
+        problem,
+        story,
+        persona,
         azure,
-        owner,
+        designer,
         start,
         isComponent
       }
